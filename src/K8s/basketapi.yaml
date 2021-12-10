@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basketapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: basketapi
+  template:
+    metadata:
+      labels:
+        app: basketapi
+    spec:
+      containers:
+        - name: basketapi
+          image: lasting/basketapi
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: CacheSettings__ConnectionString
+              valueFrom:
+                configMapKeyRef:
+                  name: configmaps
+                  key: basketapi_connectionstring
+            - name: GrpcSettings__DiscountUrl
+              valueFrom:
+                configMapKeyRef:
+                  name: configmaps
+                  key: discountgrpc_host
+            - name: EventBusSettings__HostAddress
+              valueFrom:
+                configMapKeyRef:
+                  name: configmaps
+                  key: eventqueue_host
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: basketapi-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: basketapi
+  ports:
+    - port: 8001
+      targetPort: 80

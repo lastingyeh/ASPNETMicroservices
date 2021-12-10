@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderingapi
+spec:
+  selector:
+    matchLabels:
+      app: orderingapi
+  template:
+    metadata:
+      labels:
+        app: orderingapi
+    spec:
+      containers:
+        - name: orderingapi
+          image: lasting/orderingapi
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ConnectionStrings__OrderingConnectionString
+              valueFrom:
+                configMapKeyRef:
+                  name: configmaps
+                  key: orderingapi_connectionstring
+            - name: EventBusSettings__HostAddress
+              valueFrom:
+                configMapKeyRef:
+                  name: configmaps
+                  key: eventqueue_host
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderingapi-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: orderingapi
+  ports:
+    - port: 8004
+      targetPort: 80

@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: discountgrpc
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: discountgrpc
+  template:
+    metadata:
+      labels:
+        app: discountgrpc
+    spec:
+      containers:
+        - name: discountgrpc
+          image: lasting/discountgrpc
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: DatabaseSettings__ConnectionString
+              valueFrom:
+                configMapKeyRef:
+                  name: configmaps
+                  key: discountapi_connectionstring
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: discountgrpc-service
+spec:
+  selector:
+    app: discountgrpc
+  ports:
+    - port: 8003
+      targetPort: 80

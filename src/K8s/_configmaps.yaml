@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: configmaps
+data:
+  catalogapi_connectionstring: mongodb://admin:admin1234@catalogdb-service:27017  
+  basketapi_connectionstring: basketdb-service:6379
+  discountgrpc_host: http://discountgrpc-service:8003
+  eventqueue_host: amqp://guest:guest@eventqueue-service:5672
+  discountapi_connectionstring: Server=discountdb-service;Port=5432;Database=DiscountDb;User Id=admin;Password=admin1234;
+  orderingapi_connectionstring: Server=orderdb-service;Database=OrderDb;User Id=sa;Password=1StrongPwd!!;
+  authserverapi_connectionstring: Server=authserverdb-service,1434;Database=AuthServerDb;User Id=sa;Password=1StrongPwd!!

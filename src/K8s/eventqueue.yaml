@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: eventqueue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: eventqueue
+  template:
+    metadata:
+      labels:
+        app: eventqueue
+    spec:
+      containers:
+        - name: eventqueue
+          image: rabbitmq:3-management-alpine
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - name: query
+              containerPort: 5672
+            - name: management
+              containerPort: 15672
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: eventqueue-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: eventqueue
+  ports:
+    - name: query
+      port: 5672
+      targetPort: 5672
+    - name: management
+      port: 15672
+      targetPort: 15672

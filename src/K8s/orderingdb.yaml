@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orderingdb
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: orderingdb
+  template:
+    metadata:
+      labels:
+        app: orderingdb
+    spec:
+      containers:
+      - name: orderingdb
+        image: mcr.microsoft.com/mssql/server
+        # resources:
+        #   limits:
+        #     memory: "512Mi"
+        #     cpu: "1000m"
+        env:
+          - name: ACCEPT_EULA
+            value: "Y"
+          - name: SA_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: secrets
+                key: mssql-password
+        ports:
+        - containerPort: 1433
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orderingdb-service
+spec:
+  selector:
+    app: orderingdb
+  ports:
+  - port: 1433
+    targetPort: 1433
+

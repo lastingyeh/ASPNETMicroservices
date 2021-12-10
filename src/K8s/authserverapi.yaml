@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: authserverapi
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: authserverapi
+  template:
+    metadata:
+      labels:
+        app: authserverapi
+    spec:
+      containers:
+        - name: authserverapi
+          image: lasting/authserverapi
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          env:
+            - name: ASPNETCORE_ENVIRONMENT
+              value: Development
+            - name: ConnectionStrings__AuthConnectionString
+              valueFrom:
+                configMapKeyRef:
+                  name: configmaps
+                  key: authserverapi_connectionstring
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: authserverapi-service
+spec:
+  type: LoadBalancer
+  selector:
+    app: authserverapi
+  ports:
+    - port: 8007
+      targetPort: 80
