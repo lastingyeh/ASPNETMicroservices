@@ -141,20 +141,6 @@
             "UpstreamHttpMethod": [
                 "GET"
             ]
-        },
-        {
-            "DownstreamPathTemplate": "/api/v1/Auth/login",
-            "DownstreamScheme": "http",
-            "DownstreamHostAndPorts": [
-                {
-                    "Host": "localhost",
-                    "Port": "8007"
-                }
-            ],
-            "UpstreamPathTemplate": "/Auth/Login",
-            "UpstreamHttpMethod": [
-                "POST"
-            ]
         }
     ],
     "GlobalConfiguration": {
