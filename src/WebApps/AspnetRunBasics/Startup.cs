@@ -1,5 +1,6 @@
 using System;
 using AspnetRunBasics.Services;
+using Common.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -20,13 +21,18 @@ namespace AspnetRunBasics
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<LoggingDelegatingHandler>();
+
             var apiUri = new Uri(Configuration["ApiSettings:GatewayAddress"]);
 
-            services.AddHttpClient<ICatalogService, CatalogService>(c => c.BaseAddress = apiUri);
+            services.AddHttpClient<ICatalogService, CatalogService>(c => c.BaseAddress = apiUri)
+                .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
-            services.AddHttpClient<IBasketService, BasketService>(c => c.BaseAddress = apiUri);
+            services.AddHttpClient<IBasketService, BasketService>(c => c.BaseAddress = apiUri)
+                .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
-            services.AddHttpClient<IOrderService, OrderService>(c => c.BaseAddress = apiUri);
+            services.AddHttpClient<IOrderService, OrderService>(c => c.BaseAddress = apiUri)
+                .AddHttpMessageHandler<LoggingDelegatingHandler>();
 
             services.AddRazorPages();
         }
@@ -46,7 +52,7 @@ namespace AspnetRunBasics
             }
 
             app.UseHttpsRedirection();
-            
+
             app.UseStaticFiles();
 
             app.UseRouting();

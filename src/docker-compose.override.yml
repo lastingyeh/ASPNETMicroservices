@@ -5,25 +5,25 @@ services:
     container_name: portainer
     restart: always
     ports:
-      - "8080:8000"
-      - "9000:9000"
+      - '8080:8000'
+      - '9000:9000'
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
-      
+
   catalogdb:
     container_name: catalogdb
     restart: always
     ports:
-      - "27017:27017"
-    volumes: 
+      - '27017:27017'
+    volumes:
       - mongo_data:/data/db
 
   basketdb:
     container_name: basketdb
     restart: always
     ports:
-      - "6379:6379"
+      - '6379:6379'
 
   discountdb:
     container_name: discountdb
@@ -35,35 +35,35 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     ports:
-      - "5432:5432"
+      - '5432:5432'
 
   orderdb:
     container_name: orderdb
     user: root
-    environment: 
-      - "SA_PASSWORD=1StrongPwd!!"
-      - "ACCEPT_EULA=Y"
+    environment:
+      - 'SA_PASSWORD=1StrongPwd!!'
+      - 'ACCEPT_EULA=Y'
     restart: always
-    ports: 
-      - "1433:1433"
+    ports:
+      - '1433:1433'
 
   authserverdb:
     container_name: authserverdb
     user: root
-    environment: 
-      - "SA_PASSWORD=1StrongPwd!!"
-      - "ACCEPT_EULA=Y"
+    environment:
+      - 'SA_PASSWORD=1StrongPwd!!'
+      - 'ACCEPT_EULA=Y'
     restart: always
-    ports: 
-      - "1434:1433"
-  
+    ports:
+      - '1434:1433'
+
   rabbitmq:
     container_name: rabbitmq
     restart: always
     ports:
-      - "5672:5672"
-      - "15672:15672"
-  
+      - '5672:5672'
+      - '15672:15672'
+
   pgadmin:
     container_name: pgadmin
     environment:
@@ -71,7 +71,7 @@ services:
       - PGADMIN_DEFAULT_PASSWORD=admin1234
     restart: always
     ports:
-        - "5050:80"
+      - '5050:80'
     volumes:
       - pgadmin_data:/root/.pgadmin
 
@@ -79,88 +79,88 @@ services:
     container_name: catalog.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:ConnectionString=mongodb://catalogdb:27017"
-    depends_on: 
+      - 'DatabaseSettings:ConnectionString=mongodb://catalogdb:27017'
+    depends_on:
       - catalogdb
     ports:
-      - "8000:80"
+      - '8000:80'
 
   basket.api:
     container_name: basket.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "CacheSettings:ConnectionString=basketdb:6379"
-      - "GrpcSettings:DiscountUrl=http://discount.grpc"
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-    depends_on: 
+      - 'CacheSettings:ConnectionString=basketdb:6379'
+      - 'GrpcSettings:DiscountUrl=http://discount.grpc'
+      - 'EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672'
+    depends_on:
       - basketdb
       - rabbitmq
     ports:
-      - "8001:80"
+      - '8001:80'
 
   discount.api:
     container_name: discount.api
-    environment: 
+    environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=admin1234;" 
-    depends_on: 
+      - 'DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=admin1234;'
+    depends_on:
       - discountdb
-    ports: 
-      - "8002:80"
+    ports:
+      - '8002:80'
 
   discount.grpc:
     container_name: discount.grpc
-    environment: 
+    environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=admin1234;" 
-    depends_on: 
+      - 'DatabaseSettings:ConnectionString=Server=discountdb;Port=5432;Database=DiscountDb;User Id=admin;Password=admin1234;'
+    depends_on:
       - discountdb
-    ports: 
-      - "8003:80"
+    ports:
+      - '8003:80'
 
   ordering.api:
     container_name: ordering.api
-    environment: 
+    environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=1StrongPwd!!" 
-      - "EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672"
-    depends_on: 
+      - 'ConnectionStrings:OrderingConnectionString=Server=orderdb;Database=OrderDb;User Id=sa;Password=1StrongPwd!!'
+      - 'EventBusSettings:HostAddress=amqp://guest:guest@rabbitmq:5672'
+    depends_on:
       - orderdb
       - rabbitmq
-    ports: 
-      - "8004:80"
-    
+    ports:
+      - '8004:80'
+
   ocelotapigw:
     container_name: ocelotapigw
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
     depends_on:
-        - catalog.api
-        - basket.api
-        - discount.api
-        - ordering.api
+      - catalog.api
+      - basket.api
+      - discount.api
+      - ordering.api
     ports:
-      - "8010:80"
+      - '8010:80'
 
   shopping.aggregator:
     container_name: shopping.aggregator
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ApiSettings:CatalogUrl=http://catalog.api"
-      - "ApiSettings:BasketUrl=http://basket.api"
-      - "ApiSettings:OrderingUrl=http://ordering.api"
+      - 'ApiSettings:CatalogUrl=http://catalog.api'
+      - 'ApiSettings:BasketUrl=http://basket.api'
+      - 'ApiSettings:OrderingUrl=http://ordering.api'
     depends_on:
       - catalog.api
       - basket.api
       - ordering.api
     ports:
-      - "8005:80"
+      - '8005:80'
 
   aspnetrunbasics:
     container_name: aspnetrunbasics
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ApiSettings:GatewayAddress=http://ocelotapigw"
+      - 'ApiSettings:GatewayAddress=http://ocelotapigw'
     depends_on:
       - ocelotapigw
       - catalog.api
@@ -168,14 +168,35 @@ services:
       - ordering.api
       - discount.api
     ports:
-      - "8006:80"
-  
+      - '8006:80'
+
   authserver.api:
     container_name: authserver.api
-    environment: 
+    environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - "ConnectionStrings:AuthConnectionString=Server=authserverdb;Database=AuthServerDb;User Id=sa;Password=1StrongPwd!!"
-    depends_on: 
+      - 'ConnectionStrings:AuthConnectionString=Server=authserverdb;Database=AuthServerDb;User Id=sa;Password=1StrongPwd!!'
+    depends_on:
       - authserverdb
-    ports: 
-      - "8007:80"  
+    ports:
+      - '8007:80'
+
+  elasticsearch:
+    container_name: elasticsearch
+    environment:
+      - xpack.monitoring.enabled=true
+      - xpack.watcher.enabled=false
+      - 'ES_JAVA_OPTS=-Xms512m -Xmx512m'
+      - discovery.type=single-node
+    ports:
+      - '9200:9200'
+    volumes:
+      - elasticsearch_data:/usr/share/elasticsearch/data
+
+  kibana:
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_URL=http://elasticsearch:9200
+    depends_on:
+      - elasticsearch
+    ports:
+      - '5601:5601'

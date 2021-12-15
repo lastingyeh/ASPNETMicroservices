@@ -1,7 +1,5 @@
 ## .Net Core Microservices
 
-
-
 - Catalog.API
 
   - webapi     
@@ -74,6 +72,16 @@
 
   - Docker
 
+  - docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+
+### Monitoring
+
+- elasticsearch
+  - http://localhost:9200
+  - http://localhost:9200/_alias
+- kibana
+  - http://localhost:5601/app/home#
+
 ---
 ## References
 
@@ -82,3 +90,5 @@
 - [SingletonSean/authentication-server](https://github.com/SingletonSean/authentication-server)
 
 - [ASP.NET Core JWT Authentication Server](https://www.youtube.com/playlist?list=PLA8ZIAm2I03hG7cAQC6xytRanKLbS7fTK)
+
+- [AspnetMicroservices_CrossCutting-Mehmet Özkaya](https://github.com/mehmetozkaya/AspnetMicroservices_CrossCutting)

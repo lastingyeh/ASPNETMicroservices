@@ -4,19 +4,24 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using AspnetRunBasics.Extensions;
 using AspnetRunBasics.Models;
+using Microsoft.Extensions.Logging;
 
 namespace AspnetRunBasics.Services
 {
     public class CatalogService : ICatalogService
     {
         private readonly HttpClient _httpClient;
-        public CatalogService(HttpClient httpClient)
+        private readonly ILogger<CatalogService> _logger;
+        public CatalogService(HttpClient httpClient, ILogger<CatalogService> logger)
         {
+            _logger = logger;
             _httpClient = httpClient;
         }
 
         public async Task<IEnumerable<CatalogModel>> GetCatalog()
         {
+            _logger.LogInformation("Getting Catalog Products from url: {url} and custom property : {customProperty}", _httpClient.BaseAddress, 6);
+
             var response = await _httpClient.GetAsync("/Catalog");
 
             return await response.ReadContentAs<List<CatalogModel>>();

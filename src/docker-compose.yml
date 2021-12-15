@@ -79,8 +79,16 @@ services:
       context: .
       dockerfile: Services/Auth/AuthServer.API/Dockerfile
 
+  elasticsearch:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.14.2
+
+  
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.14.2
+
 volumes: 
   portainer_data:
   mongo_data:
   postgres_data:
   pgadmin_data:
+  elasticsearch_data:
