@@ -1,89 +1,64 @@
-## .Net Core Microservices
+# .Net Core Microservices
 
-- Catalog.API
-
-  - webapi     
-
-  - mongodb
-
-- Basket.API
-
-  - webapi
-
-  - redis
-
-  - rabbitmq
-
-- Discount.API  
-
-  - webapi
-
-  - postgres
-
-- Discount.GRPC
-  
-  - grpc
-
-  - postgres
-
-- Ordering.API
-
-  - webapi
-
-  - mssql
-
-  - rabbitmq
-
-- OcelotApiGw
-
-  - ApiGateway
-
-- Shopping.Aggregator
-
-  - webapi aggregator
-
-- AspnetRunBasics
-
-  - web client 
-
-- portainer
-
-  - containers management platform
-
-- pgadmin
-
-  - postgres management platform
-
-- authserver.api
-
-  - mssql
-
-  - jwt schema authentication
+## Technics
 
 ### Devops
+- Azure devops
+- Github
+- Azure kubernetes service (AKS)
+- Azure container registry (ACR)
+- Docker / Docker-compose
 
-  - Azure devops
+### Databases
+- MongoDB
+- Redis
+- Postgres
+- SqlServer
+- Elasticsearch
+- 
 
-  - Github
-
-  - Azure kubernetes service
-
-  - Azure container registry
-
-  - Docker
-
-  - docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+### Queue
+- RabbitMQ
 
 ### Monitoring
-
-- elasticsearch
-  - http://localhost:9200
-  - http://localhost:9200/_alias
+- pgadmin
+- portainer
 - kibana
-  - http://localhost:5601/app/home#
 
+### Code / Code structure
+- net core 5.0
+- CQRS
+- Mediator
+- AutoMapper
+- Serilog
+- Razor / MVC
+- Ocelot (ApiGateway)
+- Aggregator (Backend for Frontend)
+- MassTransit (RabbitMQ)
+  
+## Testing
 ---
+### Docker
+```
+$ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
+```
+### TEST URLs
+- Catalog API -> http://host.docker.internal:8000/swagger/index.html
+- Basket API -> http://host.docker.internal:8001/swagger/index.html
+- Discount API -> http://host.docker.internal:8002/swagger/index.html
+- Ordering API -> http://host.docker.internal:8004/swagger/index.html
+- Shopping.Aggregator -> http://host.docker.internal:8005/swagger/index.html
+- API Gateway -> http://host.docker.internal:8010/Catalog
+- Rabbit Management Dashboard -> http://host.docker.internal:15672 -- guest/guest
+- Portainer -> http://host.docker.internal:9000 -- admin/admin1234
+- pgAdmin PostgreSQL -> http://host.docker.internal:5050 -- admin@aspnetrun.com/admin1234
+- Elasticsearch -> http://host.docker.internal:9200
+- Kibana -> http://host.docker.internal:5601/app/home
+- Web Status -> http://host.docker.internal:8007
+- Web UI -> http://host.docker.internal:8006
+
 ## References
+---
 
 - [Microservices Architecture and Implementation on .NET 5](https://www.udemy.com/course/microservices-architecture-and-implementation-on-dotnet/)
 
@@ -91,4 +66,6 @@
 
 - [ASP.NET Core JWT Authentication Server](https://www.youtube.com/playlist?list=PLA8ZIAm2I03hG7cAQC6xytRanKLbS7fTK)
 
-- [AspnetMicroservices_CrossCutting-Mehmet Özkaya](https://github.com/mehmetozkaya/AspnetMicroservices_CrossCutting)
+- [AspnetMicroservices_CrossCutting](https://github.com/mehmetozkaya/AspnetMicroservices_CrossCutting)
+
+- [run-aspnetcore-microservices](https://github.com/aspnetrun/run-aspnetcore-microservices)
