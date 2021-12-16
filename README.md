@@ -37,7 +37,7 @@
 - MassTransit (RabbitMQ)
   
 ## Testing
----
+
 ### Docker
 ```
 $ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
@@ -58,7 +58,6 @@ $ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 - Web UI -> http://host.docker.internal:8006
 
 ## References
----
 
 - [Microservices Architecture and Implementation on .NET 5](https://www.udemy.com/course/microservices-architecture-and-implementation-on-dotnet/)
 
