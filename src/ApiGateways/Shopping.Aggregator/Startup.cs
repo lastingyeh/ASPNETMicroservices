@@ -1,4 +1,5 @@
 using System;
+using System.Net.Http;
 using Common.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using Polly;
+using Polly.Extensions.Http;
+using Serilog;
 using Shopping.Aggregator.Services;
 
 namespace Shopping.Aggregator
@@ -28,19 +32,25 @@ namespace Shopping.Aggregator
             {
                 c.BaseAddress = new Uri(Configuration["ApiSettings:CatalogUrl"]);
             })
-            .AddHttpMessageHandler<LoggingDelegatingHandler>();
+            .AddHttpMessageHandler<LoggingDelegatingHandler>()
+            .AddPolicyHandler(GetRetryPolicy())
+            .AddPolicyHandler(GetCircuitBreakingPolicy());
 
             services.AddHttpClient<IBasketService, BasketService>(c =>
             {
                 c.BaseAddress = new Uri(Configuration["ApiSettings:BasketUrl"]);
             })
-            .AddHttpMessageHandler<LoggingDelegatingHandler>();
+            .AddHttpMessageHandler<LoggingDelegatingHandler>()
+            .AddPolicyHandler(GetRetryPolicy())
+            .AddPolicyHandler(GetCircuitBreakingPolicy());
 
             services.AddHttpClient<IOrderService, OrderService>(c =>
             {
                 c.BaseAddress = new Uri(Configuration["ApiSettings:OrderingUrl"]);
             })
-            .AddHttpMessageHandler<LoggingDelegatingHandler>();
+            .AddHttpMessageHandler<LoggingDelegatingHandler>()
+            .AddPolicyHandler(GetRetryPolicy())
+            .AddPolicyHandler(GetCircuitBreakingPolicy());
 
             services.AddControllers();
 
@@ -49,6 +59,26 @@ namespace Shopping.Aggregator
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Shopping.Aggregator", Version = "v1" });
             });
         }
+
+        // In this case will wait for
+        // 2 ^ 1 secs then
+        // 2 ^ 2 secs then
+        // 2 ^ 3 secs then
+        // 2 ^ 4 secs then
+        // 2 ^ 5 secs then
+        private static IAsyncPolicy<HttpResponseMessage> GetRetryPolicy() =>
+            HttpPolicyExtensions.HandleTransientHttpError()
+                .WaitAndRetryAsync(
+                    retryCount: 5,
+                    sleepDurationProvider: retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)),
+                    onRetry: (ex, retryCount, context) =>
+                    {
+                        Log.Error($"Retry {retryCount} of {context.PolicyKey} at {context.OperationKey}, due to : {ex}.");
+                    });
+
+        private static IAsyncPolicy<HttpResponseMessage> GetCircuitBreakingPolicy() =>
+            HttpPolicyExtensions.HandleTransientHttpError()
+                .CircuitBreakerAsync(handledEventsAllowedBeforeBreaking: 5, durationOfBreak: TimeSpan.FromSeconds(30));
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

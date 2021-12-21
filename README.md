@@ -26,7 +26,7 @@
 - kibana
 
 ### Code / Code structure
-- net core 5.0
+- ASP NETCORE 5
 - CQRS
 - Mediator
 - AutoMapper
@@ -35,6 +35,7 @@
 - Ocelot (ApiGateway)
 - Aggregator (Backend for Frontend)
 - MassTransit (RabbitMQ)
+- Polly
   
 ## Testing
 
@@ -68,3 +69,7 @@ $ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 - [AspnetMicroservices_CrossCutting](https://github.com/mehmetozkaya/AspnetMicroservices_CrossCutting)
 
 - [run-aspnetcore-microservices](https://github.com/aspnetrun/run-aspnetcore-microservices)
+
+- [Polly](https://github.com/App-vNext/Polly)
+
+- [Architecting Cloud Native .NET Applications for Azure](https://docs.microsoft.com/en-us/dotnet/architecture/cloud-native/)
