@@ -16,8 +16,8 @@ services:
   orderdb:
     image: mcr.microsoft.com/mssql/server
   
-  authserverdb:
-    image: mcr.microsoft.com/mssql/server
+  # authserverdb:
+  #   image: mcr.microsoft.com/mssql/server
 
   rabbitmq:
     image: rabbitmq:3-management-alpine
@@ -73,18 +73,23 @@ services:
       context: .
       dockerfile: WebApps/AspnetRunBasics/Dockerfile
 
-  authserver.api:
-    image: ${DOCKER_REGISTRY-}authserverapi
-    build:
-      context: .
-      dockerfile: Services/Auth/AuthServer.API/Dockerfile
+  # authserver.api:
+  #   image: ${DOCKER_REGISTRY-}authserverapi
+  #   build:
+  #     context: .
+  #     dockerfile: Services/Auth/AuthServer.API/Dockerfile
 
   elasticsearch:
     image: docker.elastic.co/elasticsearch/elasticsearch:7.16.1
 
-  
   kibana:
     image: docker.elastic.co/kibana/kibana:7.16.1
+
+  webstatus:
+    image: ${DOCKER_REGISTRY-}webstatus
+    build:
+      context: .
+      dockerfile: WebApps/WebStatus/Dockerfile
 
 volumes: 
   portainer_data:

@@ -19,25 +19,31 @@
 
 ### Queue
 - RabbitMQ
+- MassTransit
 
 ### Monitoring
 - pgadmin
 - portainer
 - kibana
+- watchdog
 
-### Code / Code structure
-- ASP NETCORE 5
-- CQRS
-- Mediator
-- AutoMapper
-- Serilog
-- Razor / MVC
-- Ocelot (ApiGateway)
-- Aggregator (Backend for Frontend)
-- MassTransit (RabbitMQ)
-- Polly
+### Code / Tricks
+- ASP NETCORE 5 [*]
+- CQRS [Ordering.API]
+- Mediator [Ordering.API]
+- AutoMapper [*]
+- Serilog [*]
+- Razor / MVC [AspnetRunBasics]
+- Ocelot [ApiGateway]
+- Aggregator [Shopping.Aggregator]
+- MassTransit [Order.API,Basket.API] 
+- Polly [*]
+- Watch Dog [WebStatus]
+- Grpc [Basket.API,Discount.Grpc]
   
 ## Testing
+
+## Authentication / Authorization
 
 ### Docker
 ```
@@ -62,14 +68,18 @@ $ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 
 - [Microservices Architecture and Implementation on .NET 5](https://www.udemy.com/course/microservices-architecture-and-implementation-on-dotnet/)
 
+- [Microservices Observability, Resilience, Monitoring on .Net](https://www.udemy.com/course/microservices-observability-resilience-monitoring-on-net/)
+
 - [SingletonSean/authentication-server](https://github.com/SingletonSean/authentication-server)
 
-- [ASP.NET Core JWT Authentication Server](https://www.youtube.com/playlist?list=PLA8ZIAm2I03hG7cAQC6xytRanKLbS7fTK)
-
 - [AspnetMicroservices_CrossCutting](https://github.com/mehmetozkaya/AspnetMicroservices_CrossCutting)
+
+- [ASP.NET Core JWT Authentication Server](https://www.youtube.com/playlist?list=PLA8ZIAm2I03hG7cAQC6xytRanKLbS7fTK)
 
 - [run-aspnetcore-microservices](https://github.com/aspnetrun/run-aspnetcore-microservices)
 
 - [Polly](https://github.com/App-vNext/Polly)
 
 - [Architecting Cloud Native .NET Applications for Azure](https://docs.microsoft.com/en-us/dotnet/architecture/cloud-native/)
+
+- [AspNetCore.Diagnostics.HealthChecks](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks)
