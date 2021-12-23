@@ -3,6 +3,7 @@
 ## Technics
 
 ### Devops
+
 - Azure devops
 - Github
 - Azure kubernetes service (AKS)
@@ -10,24 +11,28 @@
 - Docker / Docker-compose
 
 ### Databases
+
 - MongoDB
 - Redis
 - Postgres
 - SqlServer
 - Elasticsearch
-- 
+-
 
 ### Queue
+
 - RabbitMQ
 - MassTransit
 
 ### Monitoring
+
 - pgadmin
 - portainer
 - kibana
 - watchdog
 
 ### Code / Tricks
+
 - ASP NETCORE 5 [*]
 - CQRS [Ordering.API]
 - Mediator [Ordering.API]
@@ -36,20 +41,23 @@
 - Razor / MVC [AspnetRunBasics]
 - Ocelot [ApiGateway]
 - Aggregator [Shopping.Aggregator]
-- MassTransit [Order.API,Basket.API] 
+- MassTransit [Order.API,Basket.API]
 - Polly [*]
 - Watch Dog [WebStatus]
 - Grpc [Basket.API,Discount.Grpc]
-  
+
 ## Testing
 
 ## Authentication / Authorization
 
 ### Docker
+
 ```
 $ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 ```
+
 ### TEST URLs
+
 - Catalog API -> http://host.docker.internal:8000/swagger/index.html
 - Basket API -> http://host.docker.internal:8001/swagger/index.html
 - Discount API -> http://host.docker.internal:8002/swagger/index.html
@@ -71,6 +79,8 @@ $ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 - [Microservices Observability, Resilience, Monitoring on .Net](https://www.udemy.com/course/microservices-observability-resilience-monitoring-on-net/)
 
 - [SingletonSean/authentication-server](https://github.com/SingletonSean/authentication-server)
+
+- [aspnetrun](https://github.com/aspnetrun)
 
 - [AspnetMicroservices_CrossCutting](https://github.com/mehmetozkaya/AspnetMicroservices_CrossCutting)
 

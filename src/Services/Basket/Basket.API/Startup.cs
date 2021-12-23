@@ -1,5 +1,4 @@
 using System;
-using Basket.API.Extensions;
 using Basket.API.GrpcServices;
 using Basket.API.Repositories;
 using Discount.Grpc.Protos;
@@ -35,29 +34,17 @@ namespace Basket.API
                 options.Configuration = Configuration.GetValue<string>("CacheSettings:ConnectionString");
             });
 
-            services.AddControllers(opts =>
-            {
-                var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
-
-                opts.Filters.Add(new AuthorizeFilter(policy));
-            });
-
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.API", Version = "v1" });
-            });
-
             services.AddScoped<IBasketRepository, BasketRepository>();
-
+            
             services.AddAutoMapper(typeof(Startup));
-
+            
             services.AddGrpcClient<DiscountProtoService.DiscountProtoServiceClient>
             (
                 o => o.Address = new Uri(Configuration["GrpcSettings:DiscountUrl"])
             );
-
+            
             services.AddScoped<DiscountGrpcService>();
-
+            
             services.AddMassTransit(config =>
             {
                 config.UsingRabbitMq((ctx, cfg) =>
@@ -67,10 +54,24 @@ namespace Basket.API
                     // cfg.UseHealthCheck(ctx);
                 });
             });
-
+            
             services.AddMassTransitHostedService();
 
-            services.AddIdentityServices(Configuration);
+            services.AddControllers();
+            
+            // services.AddControllers(opts =>
+            // {
+            //     var policy = new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build();
+
+            //     opts.Filters.Add(new AuthorizeFilter(policy));
+            // });
+
+            // services.AddIdentityServices(Configuration);
+            
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "Basket.API", Version = "v1" });
+            });
 
             services.AddHealthChecks()
                 .AddRedis(Configuration["CacheSettings:ConnectionString"], "Redis Health", HealthStatus.Degraded);
@@ -86,11 +87,11 @@ namespace Basket.API
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Basket.API v1"));
             }
 
-            app.UseHttpsRedirection();
+            // app.UseHttpsRedirection();
 
             app.UseRouting();
 
-            app.UseAuthentication();
+            // app.UseAuthentication();
 
             app.UseAuthorization();
 

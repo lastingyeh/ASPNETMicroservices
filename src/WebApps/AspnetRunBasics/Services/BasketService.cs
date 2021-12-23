@@ -36,7 +36,6 @@ namespace AspnetRunBasics.Services
 
             if (!response.IsSuccessStatusCode)
                 throw new Exception("Something went wrong when calling api.");
-
         }
     }
 }
