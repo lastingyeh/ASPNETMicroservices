@@ -1,5 +1,4 @@
 using System;
-using System.Reflection;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Sinks.Elasticsearch;

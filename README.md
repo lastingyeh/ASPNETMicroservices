@@ -45,6 +45,7 @@
 - Polly [*]
 - Watch Dog [WebStatus]
 - Grpc [Basket.API,Discount.Grpc]
+- Identity Server [Identity.API]
 
 ## Testing
 
@@ -71,6 +72,7 @@ $ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 - Kibana -> http://host.docker.internal:5601/app/home
 - Web Status -> http://host.docker.internal:8007
 - Web UI -> http://host.docker.internal:8006
+- Identity.API Login -> http://host.docker.internal:8009/account/login
 
 ## References
 
