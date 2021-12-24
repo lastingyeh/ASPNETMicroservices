@@ -95,3 +95,5 @@ $ docker-compose -f docker-compose.yml -f docker-compose.override.yml up -d
 - [Architecting Cloud Native .NET Applications for Azure](https://docs.microsoft.com/en-us/dotnet/architecture/cloud-native/)
 
 - [AspNetCore.Diagnostics.HealthChecks](https://github.com/Xabaril/AspNetCore.Diagnostics.HealthChecks)
+
+- [Identity Server 4](https://identityserver4.readthedocs.io/en/latest/)

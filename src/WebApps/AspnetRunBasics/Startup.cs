@@ -1,15 +1,18 @@
 using System;
 using System.Net.Http;
+using AspnetRunBasics.Extensions;
 using AspnetRunBasics.Services;
 using Common.Logging;
 using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Logging;
 using Polly;
 using Polly.Extensions.Http;
 using Serilog;
@@ -28,6 +31,9 @@ namespace AspnetRunBasics
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Just for [Development]
+            IdentityModelEventSource.ShowPII = true;
+            
             services.AddTransient<LoggingDelegatingHandler>();
 
             var apiUri = new Uri(Configuration["ApiSettings:GatewayAddress"]);
@@ -48,6 +54,8 @@ namespace AspnetRunBasics
                 .AddPolicyHandler(GetCircuitBreakingPolicy());
 
             services.AddRazorPages();
+
+            services.AddCustomAuthentication(Configuration);
 
             services.AddHealthChecks()
                 .AddUrlGroup(apiUri, "Ocelot API Gw", HealthStatus.Degraded);
@@ -92,7 +100,11 @@ namespace AspnetRunBasics
 
             app.UseStaticFiles();
 
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+
             app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

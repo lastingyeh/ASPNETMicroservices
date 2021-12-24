@@ -22,20 +22,16 @@ namespace Identity.API.Configuration
                     AllowAccessTokensViaBrowser = true,
                     RequireConsent = false,
                     AllowOfflineAccess = true,
-                    RedirectUris = new List<string>
-                    {
-                        $"{clientsUrl["AspNetRunBasics"]}/signin-oidc"
-                    },
-                    PostLogoutRedirectUris = new List<string>
-                    {
-                        $"{clientsUrl["AspNetRunBasics"]}/signout-callback-oidc"
-                    },
+                    RedirectUris = {$"{clientsUrl["AspNetRunBasics"]}/signin-oidc"},
+                    PostLogoutRedirectUris = {$"{clientsUrl["AspNetRunBasics"]}/signout-callback-oidc"},
                     AllowedScopes =
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "basket.checkout",
                     },
+                    // for dev need to set 'false' [GrantTypes.Hybrid]
+                    RequirePkce = false,
                 },
                 new Client
                 {

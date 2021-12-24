@@ -167,8 +167,10 @@ services:
     container_name: aspnetrunbasics
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - 'ApiSettings:GatewayAddress=http://ocelotapigw'
-      - 'ElasticConfiguration:Uri=http://elasticsearch:9200'
+      - ApiSettings:GatewayAddress=http://ocelotapigw
+      - ElasticConfiguration:Uri=http://elasticsearch:9200
+      - IdentityUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:8009
+      - CallBackUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:8006
     depends_on:
       - ocelotapigw
       - catalog.api
@@ -222,9 +224,9 @@ services:
     container_name: identity.api
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
-      - 'ConnectionStrings:IdentityConnectionString=Server=tcp:identitydb;Database=IdentityDb;User Id=sa;Password=1StrongPwd!!'
-      - 'ElasticConfiguration:Uri=http://basket.api'
-      - 'ElasticConfiguration:Uri=http://elasticsearch:9200'
+      - ConnectionStrings:IdentityConnectionString=Server=tcp:identitydb;Database=IdentityDb;User Id=sa;Password=1StrongPwd!!
+      - AspNetRunBasicsClient=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:8006
+      - ElasticConfiguration:Uri=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:9200
       # - ASPNETCORE_URLS=https://+:443;http://+:80
     depends_on:
       - identitydb
