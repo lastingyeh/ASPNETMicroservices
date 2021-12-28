@@ -1,6 +1,5 @@
 using System;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -23,7 +22,8 @@ namespace AspnetRunBasics.Extensions
                 opts.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 opts.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
             })
-            .AddCookie(setup => setup.ExpireTimeSpan = TimeSpan.FromMinutes(sessionCookieLifetime))
+            .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+                setup => setup.ExpireTimeSpan = TimeSpan.FromMinutes(sessionCookieLifetime))
             .AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, opts =>
             {
                 // opts.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -37,6 +37,7 @@ namespace AspnetRunBasics.Extensions
                 opts.ResponseType = "code id_token";
                 opts.SaveTokens = true;
                 opts.GetClaimsFromUserInfoEndpoint = true;
+                
                 opts.RequireHttpsMetadata = false;
 
                 // scopes

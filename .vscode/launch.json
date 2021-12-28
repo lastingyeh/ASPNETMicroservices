@@ -1,23 +1,18 @@
 {
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Docker .NET Core Attach (Preview)",
+            "name": "Docker .NET Core Attach",
             "type": "docker",
             "request": "attach",
             "platform": "netCore",
             "sourceFileMap": {
                 "/src": "${workspaceFolder}"
             }
-        },
-        {
-            "name": "Docker .NET Core Launch",
-            "type": "docker",
-            "request": "launch",
-            "preLaunchTask": "docker-run: debug",
-            "netCore": {
-                "appProject": "${workspaceFolder}/src/Services/Basket/Basket.API/Basket.API.csproj"
-            }
         }
+
     ]
 }

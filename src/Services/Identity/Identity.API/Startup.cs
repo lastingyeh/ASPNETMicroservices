@@ -18,6 +18,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Logging;
 
 namespace Identity.API
 {
@@ -55,7 +56,7 @@ namespace Identity.API
             // Add IdentityServer
             services.AddIdentityServer(x =>
             {
-                x.IssuerUri = "null";
+                // x.IssuerUri = "null";
                 x.Authentication.CookieLifetime = TimeSpan.FromHours(2);
             })
             .AddDevspacesIfNeeded(Configuration.GetValue("EnableDevspaces", false))
@@ -81,6 +82,9 @@ namespace Identity.API
             })
             .Services.AddTransient<IProfileService, ProfileService>();
 
+            // Just for [Development]
+            IdentityModelEventSource.ShowPII = true;
+
             services.AddControllers();
 
             services.AddControllersWithViews();
@@ -88,13 +92,13 @@ namespace Identity.API
             services.AddRazorPages();
 
             services.AddHealthChecks()
-                    .AddDbContextCheck<ApplicationDbContext>();
+                .AddDbContextCheck<ApplicationDbContext>();
 
             services.AddHealthChecks()
-                    .AddDbContextCheck<ConfigurationDbContext>();
+                .AddDbContextCheck<ConfigurationDbContext>();
 
             services.AddHealthChecks()
-                    .AddDbContextCheck<PersistedGrantDbContext>();
+                .AddDbContextCheck<PersistedGrantDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -142,7 +146,7 @@ namespace Identity.API
             {
                 endpoints.MapDefaultControllerRoute();
 
-                endpoints.MapControllers();
+                // endpoints.MapControllers();
 
                 endpoints.MapHealthChecks("/hc", new HealthCheckOptions()
                 {

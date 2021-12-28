@@ -3,6 +3,7 @@ using System.Net.Http;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 
 namespace Common.Logging
@@ -10,6 +11,7 @@ namespace Common.Logging
     public class LoggingDelegatingHandler : DelegatingHandler
     {
         private readonly ILogger<LoggingDelegatingHandler> _logger;
+
         public LoggingDelegatingHandler(ILogger<LoggingDelegatingHandler> logger)
         {
             _logger = logger;

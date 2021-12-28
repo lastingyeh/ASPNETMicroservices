@@ -7,12 +7,11 @@ using HealthChecks.UI.Client;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
+using Microsoft.Net.Http.Headers;
 using Polly;
 using Polly.Extensions.Http;
 using Serilog;
@@ -31,9 +30,11 @@ namespace AspnetRunBasics
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            // Just for [Development]
-            IdentityModelEventSource.ShowPII = true;
-            
+            services.AddRazorPages();
+
+            services.AddHttpContextAccessor();
+
+            services.AddTransient<AuthenticationDelegatingHandler>();
             services.AddTransient<LoggingDelegatingHandler>();
 
             var apiUri = new Uri(Configuration["ApiSettings:GatewayAddress"]);
@@ -43,7 +44,13 @@ namespace AspnetRunBasics
                 .AddPolicyHandler(GetRetryPolicy())
                 .AddPolicyHandler(GetCircuitBreakingPolicy());
 
-            services.AddHttpClient<IBasketService, BasketService>(c => c.BaseAddress = apiUri)
+            services.AddHttpClient<IBasketService, BasketService>(c =>
+            {
+                c.BaseAddress = apiUri;
+                c.DefaultRequestHeaders.Clear();
+                c.DefaultRequestHeaders.Add(HeaderNames.Accept, "application/json");
+            })
+                .AddHttpMessageHandler<AuthenticationDelegatingHandler>()
                 .AddHttpMessageHandler<LoggingDelegatingHandler>()
                 .AddPolicyHandler(GetRetryPolicy())
                 .AddPolicyHandler(GetCircuitBreakingPolicy());
@@ -52,8 +59,6 @@ namespace AspnetRunBasics
                 .AddHttpMessageHandler<LoggingDelegatingHandler>()
                 .AddPolicyHandler(GetRetryPolicy())
                 .AddPolicyHandler(GetCircuitBreakingPolicy());
-
-            services.AddRazorPages();
 
             services.AddCustomAuthentication(Configuration);
 
@@ -100,12 +105,11 @@ namespace AspnetRunBasics
 
             app.UseStaticFiles();
 
-            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = SameSiteMode.Lax });
+            app.UseCookiePolicy(new CookiePolicyOptions { MinimumSameSitePolicy = Microsoft.AspNetCore.Http.SameSiteMode.Lax });
 
             app.UseRouting();
 
             app.UseAuthentication();
-
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

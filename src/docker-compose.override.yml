@@ -140,6 +140,7 @@ services:
     environment:
       - ASPNETCORE_ENVIRONMENT=Development
       - 'ElasticConfiguration:Uri=http://elasticsearch:9200'
+      - GlobalConfiguration:BaseUrl=http://${ESHOP_EXTERNAL_DNS_NAME_OR_IP}:8010
     depends_on:
       - catalog.api
       - basket.api
@@ -218,7 +219,7 @@ services:
       - HealthChecksUI__HealthChecks__5__Name=AspnetRunBasics WebMVC Health Check
       - HealthChecksUI__HealthChecks__5__Uri=http://aspnetrunbasics/hc
     ports:
-      - "8007:80"
+      - '8007:80'
 
   identity.api:
     container_name: identity.api
@@ -231,6 +232,6 @@ services:
     depends_on:
       - identitydb
     ports:
-      - "8009:80"
+      - '8009:80'
     # volumes:
     #   - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
